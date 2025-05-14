@@ -6,7 +6,7 @@
 
 struct SDL_Surface;
 struct SDL_Window;
-struct _TTF_Font;
+struct TTF_Font;
 struct SDL_Renderer;
 
 namespace genv
@@ -72,7 +72,7 @@ protected:
     SDL_Surface* buf;
     int draw_clr;
     bool transp;
-    _TTF_Font* font;
+    TTF_Font* font;
     bool antialiastext;
     std::string loaded_font_file_name;
     int font_size;
