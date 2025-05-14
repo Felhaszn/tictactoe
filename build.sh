@@ -1,3 +1,3 @@
 #!/bin/bash
 
-g++ -o program *.cpp $(sdl2-config --cflags --libs) -lSDL2_image -lSDL2_ttf
+g++ -o tictactoe *.cpp $(sdl2-config --cflags --libs) -lSDL2_image -lSDL2_ttf

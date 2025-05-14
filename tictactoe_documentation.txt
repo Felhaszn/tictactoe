@@ -1,0 +1,68 @@
+Tic Tac Toe Game Documentation
+==============================
+
+Overview:
+---------
+This project is a simple Tic Tac Toe game implemented using a graphical library. The game consists of a grid of squares, where each square can be clicked to toggle between a circle or a cross. The game is designed to demonstrate basic graphical programming concepts.
+
+File Descriptions:
+------------------
+1. main.cpp:
+   - The entry point of the program.
+   - Initializes the graphical window and handles the main event loop.
+   - Creates and manages the `Square` objects.
+
+2. widget.hpp / widget.cpp:
+   - Defines the base `Widget` class.
+   - Provides a common interface for all graphical components (e.g., `draw` and `handle` methods).
+
+3. square.hpp / square.cpp:
+   - Implements the `Square` class, which inherits from `Widget`.
+   - Represents a single square in the Tic Tac Toe grid.
+   - Handles mouse events and toggles between `EMPTY`, `CIRCLE`, and `CROSS` states.
+   - Draws the square and its current state.
+
+4. graphics.hpp:
+   - Includes the graphical library used for rendering (e.g., SDL2 or genv).
+
+5. build.sh:
+   - A shell script to compile the program using `g++`.
+   - Includes necessary flags for SDL2 and additional libraries like `SDL2_image` and `SDL2_ttf`.
+
+6. Makefile:
+   - Provides an alternative way to build the project using `make`.
+   - Defines rules for compiling and linking the program.
+
+7. README.md:
+   - A markdown file with instructions on how to build and run the program.
+
+How to Build and Run:
+---------------------
+1. Using the shell script:
+   - Give permission to run as a program (chmod +x build.sh).
+   - Run `./build.sh` in the terminal.
+   - This will compile all `.cpp` files and create an executable named `tictactoe`.
+
+2. Run the program:
+   - Execute `./tictactoe` to start the game.
+
+Controls:
+---------
+- Left-click on a square to toggle its state between `EMPTY`, `CIRCLE`, and `CROSS`.
+
+Future Improvements:
+--------------------
+- Add a grid of squares to represent the full Tic Tac Toe board.
+- Implement game logic to determine the winner.
+- Add a restart button to reset the game.
+- Improve the graphical interface with animations and better visuals.
+
+Dependencies:
+-------------
+- SDL2
+- SDL2_image
+- SDL2_ttf
+
+Author:
+-------
+This project was created as part of a programming exercise.
