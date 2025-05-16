@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 #include "graphics.hpp"
 #include "square.hpp"
 #include "widget.hpp"
@@ -6,16 +7,32 @@
 using namespace std;
 using namespace genv;
 
-int main() {
-    gout.open(800, 600);
-    gout << color(255, 255, 255) << move_to(0, 0) << box(800, 600);
+void handle_event(event ev, vector<Square>& squares) {
+    for (auto& square : squares) {
+        square.handle(ev);
+    }
+}
 
-    Square square(200, 200, 100);
+int main() {
+    const int grid_size = 20;
+    const int square_size = 800 / grid_size;
+
+    gout.open(800, 800);
+    gout << color(0, 0, 0) << move_to(0, 0) << box(800, 800);
+
+    vector<Square> squares;
+    for (int i = 0; i < grid_size; ++i) {
+        for (int j = 0; j < grid_size; ++j) {
+            squares.emplace_back(i * square_size, j * square_size, square_size);
+        }
+    }
 
     event ev;
     while (gin >> ev) {
-        square.handle(ev);
-        square.draw();
+        handle_event(ev, squares);
+        for (auto& square : squares) {
+            square.draw();
+        }
         gout << refresh;
     }
 
