@@ -15,6 +15,11 @@ public:
     void handle(genv::event ev) override;
     SquareState get_state() const;
 
+    int get_x() const { return x; }
+    int get_y() const { return y; }
+    int get_width() const { return width; }
+    int get_height() const { return height; }
+
     static void draw_circle(int x, int y, int radius);
     static void draw_cross(int x, int y, int size);
 };

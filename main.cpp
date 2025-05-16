@@ -3,15 +3,11 @@
 #include "graphics.hpp"
 #include "square.hpp"
 #include "widget.hpp"
+#include "gamelogic.hpp"
+#include "button.hpp"
 
 using namespace std;
 using namespace genv;
-
-void handle_event(event ev, vector<Square>& squares) {
-    for (auto& square : squares) {
-        square.handle(ev);
-    }
-}
 
 int main() {
     const int grid_size = 20;
@@ -27,14 +23,18 @@ int main() {
         }
     }
 
-    event ev;
-    while (gin >> ev) {
-        handle_event(ev, squares);
-        for (auto& square : squares) {
-            square.draw();
+    GameLogic* game_logic_ptr = nullptr; // Declare a pointer to GameLogic
+
+    Button restart_button(350, 750, 100, 40, "Restart", [&]() {
+        if (game_logic_ptr) {
+            game_logic_ptr->set_game_over(false); // Reset the game state
         }
-        gout << refresh;
-    }
+    });
+
+    GameLogic game_logic(grid_size, squares, restart_button);
+    game_logic_ptr = &game_logic; // Assign the pointer to the GameLogic instance
+
+    game_logic.event_loop();
 
     return 0;
 }
