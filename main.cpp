@@ -11,7 +11,7 @@ using namespace genv;
 
 int main() {
     const int grid_size = 20;
-    const int square_size = 800 / grid_size;
+    const int square_size = 750 / grid_size; // Adjust grid size to fit below the status area
 
     gout.open(800, 800);
     gout << color(0, 0, 0) << move_to(0, 0) << box(800, 800);
@@ -19,7 +19,7 @@ int main() {
     vector<Square> squares;
     for (int i = 0; i < grid_size; ++i) {
         for (int j = 0; j < grid_size; ++j) {
-            squares.emplace_back(i * square_size, j * square_size, square_size);
+            squares.emplace_back(i * square_size + 25, j * square_size + 75, square_size);
         }
     }
 

@@ -4,7 +4,8 @@
 using namespace genv;
 
 GameLogic::GameLogic(int grid_size, std::vector<Square>& squares, Button& restart_button)
-    : grid_size(grid_size), squares(squares), restart_button(restart_button), game_over(false) {}
+    : grid_size(grid_size), squares(squares), restart_button(restart_button), game_over(false),
+      circle_score(0), cross_score(0), is_circle_turn(true) {}
 
 void GameLogic::set_game_over(bool state) {
     game_over = state;
@@ -100,6 +101,22 @@ void GameLogic::display_result(const std::string& message, SquareState winner) c
     gout << refresh;
 }
 
+void GameLogic::draw_game_status() const {
+    gout << color(0, 0, 0) << move_to(0, 0) << box(800, 50); // Clear the status area
+    gout << color(255, 255, 255);
+
+    // Draw the circle score
+    Square::draw_circle(50, 25, 20);
+    gout << move_to(80, 30) << text(std::to_string(circle_score));
+
+    // Draw the cross score
+    Square::draw_cross(700, 5, 40);
+    gout << move_to(650, 30) << text(std::to_string(cross_score));
+
+    // Draw the current turn
+    gout << move_to(350, 30) << text(is_circle_turn ? "Circle's Turn" : "Cross's Turn");
+}
+
 void GameLogic::event_loop() {
     event ev;
 
@@ -113,9 +130,11 @@ void GameLogic::event_loop() {
 
             // Check for a winner or draw
             if (check_winner(CIRCLE)) {
+                circle_score++;
                 display_result("The winner is:", CIRCLE);
                 set_game_over(true);
             } else if (check_winner(CROSS)) {
+                cross_score++;
                 display_result("The winner is:", CROSS);
                 set_game_over(true);
             } else if (is_draw()) {
@@ -125,14 +144,15 @@ void GameLogic::event_loop() {
 
             if (!game_over) {
                 // Redraw the grid
-                gout << color(0, 0, 0) << move_to(0, 0) << box(800, 800);
+                gout << color(0, 0, 0) << move_to(0, 50) << box(800, 750); // Clear grid area
                 for (auto& square : squares) {
                     square.draw();
                 }
             }
         }
 
-        // Always draw the restart button
+        // Always draw the game status and restart button
+        draw_game_status();
         if (game_over) {
             restart_button.draw();
         }
