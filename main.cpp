@@ -7,19 +7,16 @@
 #include "button.hpp"
 #include "menu.hpp"
 
-using namespace std;
-using namespace genv;
-
 int main() {
-    gout.open(800, 800);
+    genv::gout.open(800, 800);
 
-    Menu menu;
+    Menu menu(0, 0, 800, 800);
     bool start_game = false;
     bool clear_state = false;
 
     while (!start_game) {
-        event ev;
-        gin >> ev;
+        genv::event ev;
+        genv::gin >> ev;
         menu.handle(ev, start_game, clear_state);
         menu.draw();
 
@@ -33,8 +30,8 @@ int main() {
     const int grid_size = 3;
     const int square_size = 700 / grid_size; // Adjusted to fit within the screen
 
-    gout << color(0, 0, 0) << move_to(0, 0) << box(800, 800); // Clear menu
-    vector<Square> squares;
+    genv::gout << genv::color(0, 0, 0) << genv::move_to(0, 0) << genv::box(800, 800); // Clear menu
+    std::vector<Square> squares;
     for (int i = 0; i < grid_size; ++i) {
         for (int j = 0; j < grid_size; ++j) {
             squares.emplace_back(i * square_size + 25, j * square_size + 75, square_size);
