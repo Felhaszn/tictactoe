@@ -1,5 +1,7 @@
 #include "gamelogic.hpp"
 #include "graphics.hpp"
+#include <fstream> // Include for file output
+#include <iostream> // Include for std::cerr
 
 using namespace genv;
 
@@ -86,7 +88,7 @@ bool GameLogic::is_draw() const {
 void GameLogic::display_result(const std::string& message, SquareState winner) const {
     genv::gout.load_font("LiberationSans-Regular.ttf", 20); // Load the font
     genv::gout << genv::color(0, 0, 0) << genv::move_to(0, 0) << genv::box(800, 800);
-    genv::gout << genv::color(255, 255, 255) << genv::move_to(300, 300) << genv::text(message);
+    genv::gout << genv::color(255, 255, 255) << genv::move_to(400 - gout.twidth(message)/2, 300) << genv::text(message);
 
     if (winner == CIRCLE) {
         Square::draw_circle(400, 400, 50);
@@ -95,6 +97,28 @@ void GameLogic::display_result(const std::string& message, SquareState winner) c
     } else if (winner == EMPTY) {
         Square::draw_circle(350, 400, 50);
         Square::draw_cross(450, 375, 100);
+    }
+
+    // Read previous scores from the file
+    int previous_circle_score = 0;
+    int previous_cross_score = 0;
+    std::ifstream result_file_in("/home/felhaszn/Documents/Órák/Prog2/tictactoe/result.txt");
+    if (result_file_in.is_open()) {
+        result_file_in >> previous_circle_score >> previous_cross_score;
+        result_file_in.close();
+    }
+
+    // Update the scores
+    int updated_circle_score = previous_circle_score + (winner == CIRCLE ? 1 : 0);
+    int updated_cross_score = previous_cross_score + (winner == CROSS ? 1 : 0);
+
+    // Write the updated scores back to the file
+    std::ofstream result_file_out("/home/felhaszn/Documents/Órák/Prog2/tictactoe/result.txt");
+    if (result_file_out.is_open()) {
+        result_file_out << updated_circle_score << " " << updated_cross_score << "\n";
+        result_file_out.close();
+    } else {
+        std::cerr << "Error: Unable to open result file for writing.\n";
     }
 
     // Enable the restart button
@@ -107,16 +131,28 @@ void GameLogic::draw_game_status() const {
     genv::gout << genv::color(0, 0, 0) << genv::move_to(0, 0) << genv::box(800, 50); // Clear the status area
     genv::gout << genv::color(255, 255, 255);
 
-    // Draw the circle score
-    Square::draw_circle(50, 25, 20);
-    genv::gout << genv::move_to(80, 15) << genv::text(std::to_string(circle_score));
+    // Read the saved scores from the file
+    int saved_circle_score = 0;
+    int saved_cross_score = 0;
+    std::ifstream result_file_in("result.txt");
+    if (result_file_in.is_open()) {
+        result_file_in >> saved_circle_score >> saved_cross_score;
+        result_file_in.close();
+    }
 
-    // Draw the cross score
-    Square::draw_cross(700, 5, 40);
-    genv::gout << genv::move_to(650, 15) << genv::text(std::to_string(cross_score));
+    genv::gout.load_font("LiberationSans-Regular.ttf", 40); // Load the font
+    // Draw the circle score on the left
+    Square::draw_circle(30, 40, 20);
+    genv::gout << genv::move_to(90, 15) << genv::text(std::to_string(saved_circle_score));
 
-    // Draw the current turn
-    genv::gout << genv::move_to(350, 15) << genv::text(is_circle_turn ? "Circle's Turn" : "Cross's Turn");
+    // Draw the cross score on the right
+    Square::draw_cross(750, 20, 40);
+    genv::gout << genv::move_to(700, 15) << genv::text(std::to_string(saved_cross_score));
+
+    // Center the current turn indicator
+    std::string turn_text = is_circle_turn ? "Circle's Turn" : "Cross's Turn";
+    int text_width = genv::gout.twidth(turn_text);
+    genv::gout << genv::move_to((800 - text_width) / 2, 15) << genv::text(turn_text);
 }
 
 void GameLogic::event_loop(bool& return_to_menu) {

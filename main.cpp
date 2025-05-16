@@ -38,12 +38,14 @@ int main() {
         }
 
         const int square_size = 700 / grid_size; // Adjusted to fit within the screen
+        const int grid_width = grid_size * square_size;
+        const int x_offset = (800 - grid_width) / 2; // Calculate horizontal offset to center the grid
 
         genv::gout << genv::color(0, 0, 0) << genv::move_to(0, 0) << genv::box(800, 800); // Clear menu
         std::vector<Square> squares;
         for (int i = 0; i < grid_size; ++i) {
             for (int j = 0; j < grid_size; ++j) {
-                squares.emplace_back(i * square_size + 25, j * square_size + 75, square_size);
+                squares.emplace_back(i * square_size + x_offset, j * square_size + 75, square_size);
             }
         }
 
