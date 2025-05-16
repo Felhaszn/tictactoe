@@ -3,20 +3,20 @@
 
 using namespace genv;
 
-GameLogic::GameLogic(int grid_size, std::vector<Square>& squares, Button& restart_button)
-    : grid_size(grid_size), squares(squares), restart_button(restart_button), game_over(false),
-      circle_score(0), cross_score(0), is_circle_turn(true) {}
+GameLogic::GameLogic(int grid_size, std::vector<Square>& squares, Button& restart_button, Button& back_to_menu_button)
+    : grid_size(grid_size), squares(squares), restart_button(restart_button), back_to_menu_button(back_to_menu_button),
+      game_over(false), circle_score(0), cross_score(0), is_circle_turn(true) {}
 
 void GameLogic::set_game_over(bool state) {
     game_over = state;
     if (!state) {
         // Clear the screen and redraw the grid
-        gout << color(0, 0, 0) << move_to(0, 0) << box(800, 800);
+        genv::gout << genv::color(0, 0, 0) << genv::move_to(0, 0) << genv::box(800, 800);
         for (auto& square : squares) {
-            square = Square(square.get_x(), square.get_y(), square.get_width()); // Reset each square
+            square.reset(); // Reset each square to its initial state
             square.draw();
         }
-        gout << refresh;
+        genv::gout << genv::refresh;
     }
 }
 
@@ -84,8 +84,9 @@ bool GameLogic::is_draw() const {
 }
 
 void GameLogic::display_result(const std::string& message, SquareState winner) const {
-    gout << color(0, 0, 0) << move_to(0, 0) << box(800, 800);
-    gout << color(255, 255, 255) << move_to(300, 300) << text(message);
+    genv::gout.load_font("LiberationSans-Regular.ttf", 20); // Load the font
+    genv::gout << genv::color(0, 0, 0) << genv::move_to(0, 0) << genv::box(800, 800);
+    genv::gout << genv::color(255, 255, 255) << genv::move_to(300, 300) << genv::text(message);
 
     if (winner == CIRCLE) {
         Square::draw_circle(400, 400, 50);
@@ -98,31 +99,33 @@ void GameLogic::display_result(const std::string& message, SquareState winner) c
 
     // Enable the restart button
     restart_button.draw();
-    gout << refresh;
+    genv::gout << genv::refresh;
 }
 
 void GameLogic::draw_game_status() const {
-    gout << color(0, 0, 0) << move_to(0, 0) << box(800, 50); // Clear the status area
-    gout << color(255, 255, 255);
+    genv::gout.load_font("LiberationSans-Regular.ttf", 20); // Load the font
+    genv::gout << genv::color(0, 0, 0) << genv::move_to(0, 0) << genv::box(800, 50); // Clear the status area
+    genv::gout << genv::color(255, 255, 255);
 
     // Draw the circle score
     Square::draw_circle(50, 25, 20);
-    gout << move_to(80, 30) << text(std::to_string(circle_score));
+    genv::gout << genv::move_to(80, 15) << genv::text(std::to_string(circle_score));
 
     // Draw the cross score
     Square::draw_cross(700, 5, 40);
-    gout << move_to(650, 30) << text(std::to_string(cross_score));
+    genv::gout << genv::move_to(650, 15) << genv::text(std::to_string(cross_score));
 
     // Draw the current turn
-    gout << move_to(350, 30) << text(is_circle_turn ? "Circle's Turn" : "Cross's Turn");
+    genv::gout << genv::move_to(350, 15) << genv::text(is_circle_turn ? "Circle's Turn" : "Cross's Turn");
 }
 
-void GameLogic::event_loop() {
-    event ev;
+void GameLogic::event_loop(bool& return_to_menu) {
+    genv::event ev;
 
-    while (gin >> ev) {
+    while (genv::gin >> ev) {
         if (game_over) {
             restart_button.handle(ev);
+            back_to_menu_button.handle(ev);
         } else {
             for (auto& square : squares) {
                 square.handle(ev);
@@ -144,18 +147,25 @@ void GameLogic::event_loop() {
 
             if (!game_over) {
                 // Redraw the grid
-                gout << color(0, 0, 0) << move_to(0, 50) << box(800, 750); // Clear grid area
+                genv::gout << genv::color(0, 0, 0) << genv::move_to(0, 50) << genv::box(800, 750); // Clear grid area
                 for (auto& square : squares) {
                     square.draw();
                 }
             }
         }
 
-        // Always draw the game status and restart button
+        // Always draw the game status and buttons
         draw_game_status();
         if (game_over) {
             restart_button.draw();
+            back_to_menu_button.draw();
         }
-        gout << refresh;
+        genv::gout << genv::refresh;
+
+        // Handle back to menu button
+        if (back_to_menu_button.is_clicked()) {
+            return_to_menu = true;
+            break;
+        }
     }
 }

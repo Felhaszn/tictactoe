@@ -32,6 +32,10 @@ SquareState Square::get_state() const {
     return state;
 }
 
+void Square::reset() {
+    state = EMPTY; // Reset the state to EMPTY
+}
+
 void Square::draw_circle(int cx, int cy, int radius) {
     using namespace genv;
     for (int y = -radius; y <= radius; ++y) {

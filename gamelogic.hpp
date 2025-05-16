@@ -11,6 +11,7 @@ private:
     int grid_size;
     std::vector<Square>& squares;
     Button& restart_button;
+    Button& back_to_menu_button; // Button to return to the menu
     bool game_over;
 
     int circle_score;
@@ -23,8 +24,8 @@ private:
     void draw_game_status() const;
 
 public:
-    GameLogic(int grid_size, std::vector<Square>& squares, Button& restart_button);
-    void event_loop();
+    GameLogic(int grid_size, std::vector<Square>& squares, Button& restart_button, Button& back_to_menu_button);
+    void event_loop(bool& return_to_menu);
     void set_game_over(bool state);
 };
 

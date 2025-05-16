@@ -20,6 +20,8 @@ public:
     int get_width() const { return width; }
     int get_height() const { return height; }
 
+    void reset(); // Resets the square to its initial state
+
     static void draw_circle(int x, int y, int radius);
     static void draw_cross(int x, int y, int size);
 };
