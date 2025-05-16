@@ -31,7 +31,7 @@ void Menu::draw() const {
     Square::draw_cross(500, 250, 50);  // Top-center cross
     Square::draw_circle(700, 300, 40); // Top-right circle
     Square::draw_cross(350, 600, 70);  // Bottom-center cross
-    Square::draw_circle(100, 500, 30); // Bottom-left circle
+    Square::draw_circle(100, 300, 30); // Bottom-left circle
     Square::draw_cross(250, 650, 50);  // Bottom-left cross
     Square::draw_circle(600, 600, 40); // Bottom-right circle
     Square::draw_cross(450, 550, 60);  // Center cross

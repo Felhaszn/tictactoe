@@ -1,68 +1,118 @@
-Tic Tac Toe Game Documentation
-==============================
+# Tic-Tac-Toe Documentation
 
-Overview:
----------
-This project is a simple Tic Tac Toe game implemented using a graphical library. The game consists of a grid of squares, where each square can be clicked to toggle between a circle or a cross. The game is designed to demonstrate basic graphical programming concepts.
+## Overview
+This project implements a graphical Tic-Tac-Toe game using SDL2. The game includes a menu, a game board, and functionality for tracking scores across sessions. The game is designed to be modular, with separate classes for widgets, buttons, squares, and game logic.
 
-File Descriptions:
-------------------
-1. main.cpp:
-   - The entry point of the program.
-   - Initializes the graphical window and handles the main event loop.
-   - Creates and manages the `Square` objects.
+---
 
-2. widget.hpp / widget.cpp:
-   - Defines the base `Widget` class.
-   - Provides a common interface for all graphical components (e.g., `draw` and `handle` methods).
+## Features
+1. **Menu**:
+   - Allows the user to select the grid size (15x15, 20x20, or 30x30).
+   - Includes buttons to start the game, clear the game state, or exit the application.
+   - Displays a decorative background with circles and crosses.
 
-3. square.hpp / square.cpp:
-   - Implements the `Square` class, which inherits from `Widget`.
-   - Represents a single square in the Tic Tac Toe grid.
-   - Handles mouse events and toggles between `EMPTY`, `CIRCLE`, and `CROSS` states.
-   - Draws the square and its current state.
+2. **Game Board**:
+   - Dynamically adjusts based on the selected grid size.
+   - Allows players to take turns placing circles and crosses.
+   - Highlights the winner or detects a draw.
 
-4. graphics.hpp:
-   - Includes the graphical library used for rendering (e.g., SDL2 or genv).
+3. **Score Tracking**:
+   - Saves the scores of both players (Circle and Cross) to a file (`result.txt`).
+   - Reads the scores from the file and displays them during gameplay.
+   - Allows clearing the scores using the "Clear Game State" button.
 
-5. build.sh:
-   - A shell script to compile the program using `g++`.
-   - Includes necessary flags for SDL2 and additional libraries like `SDL2_image` and `SDL2_ttf`.
+4. **Restart and Menu Navigation**:
+   - Includes a "Restart" button to reset the current game.
+   - Includes a "Menu" button to return to the main menu.
 
-6. Makefile:
-   - Provides an alternative way to build the project using `make`.
-   - Defines rules for compiling and linking the program.
+---
 
-7. README.md:
-   - A markdown file with instructions on how to build and run the program.
+## File Structure
+### Source Files
+1. **`main.cpp`**:
+   - Entry point of the application.
+   - Handles the main game loop and transitions between the menu and the game.
 
-How to Build and Run:
----------------------
-1. Using the shell script:
-   - Give permission to run as a program (chmod +x build.sh).
-   - Run `./build.sh` in the terminal.
-   - This will compile all `.cpp` files and create an executable named `tictactoe`.
+2. **`menu.hpp` and `menu.cpp`**:
+   - Implements the main menu with buttons for grid size selection, clearing the game state, and exiting the application.
+   - Draws a decorative background with circles and crosses.
 
-2. Run the program:
-   - Execute `./tictactoe` to start the game.
+3. **`gamelogic.hpp` and `gamelogic.cpp`**:
+   - Implements the game logic, including turn handling, winner detection, and score tracking.
+   - Reads and writes scores to `result.txt`.
 
-Controls:
----------
-- Left-click on a square to toggle its state between `EMPTY`, `CIRCLE`, and `CROSS`.
+4. **`square.hpp` and `square.cpp`**:
+   - Represents individual squares on the game board.
+   - Handles drawing and click detection for circles and crosses.
 
-Future Improvements:
---------------------
-- Add a grid of squares to represent the full Tic Tac Toe board.
-- Implement game logic to determine the winner.
-- Add a restart button to reset the game.
-- Improve the graphical interface with animations and better visuals.
+5. **`button.hpp` and `button.cpp`**:
+   - Implements a generic button widget with customizable labels and click callbacks.
 
-Dependencies:
--------------
+6. **`widget.hpp` and `widget.cpp`**:
+   - Base class for all graphical widgets, including buttons and squares.
+
+7. **`graphics.cpp`**:
+   - Provides low-level graphics functionality using SDL2.
+
+---
+
+## Build Instructions
+### Using `Makefile`
+1. Run `make` to build the project.
+2. Run `./tictactoe` to start the game.
+3. Run `make clean` to remove the compiled files.
+
+### Dependencies
 - SDL2
 - SDL2_image
 - SDL2_ttf
 
-Author: Felhaszn
--------
-This project was created as part of a programming exercise.
+---
+
+## How to Play
+1. Launch the game by running `./tictactoe`.
+2. In the menu:
+   - Select a grid size (15x15, 20x20, or 30x30).
+   - Click "Clear Game State" to reset the scores.
+   - Click "Exit" to close the application.
+3. During the game:
+   - Players take turns clicking on squares to place their symbols (Circle or Cross).
+   - The game detects a winner or a draw.
+   - Use the "Restart" button to reset the board.
+   - Use the "Menu" button to return to the main menu.
+4. Scores are saved to `result.txt` and persist across sessions.
+
+---
+
+## File Descriptions
+### `result.txt`
+- Stores the scores of both players in the format:
+  ```
+  <circle_score> <cross_score>
+  ```
+- Automatically updated after each game.
+
+### `Makefile`
+- Automates the build process.
+- Targets:
+  - `all`: Builds the `tictactoe` executable.
+  - `clean`: Removes compiled files.
+
+---
+
+## Known Issues
+- None reported.
+
+---
+
+## Future Improvements
+1. Add animations for placing symbols.
+2. Implement AI for single-player mode.
+3. Add sound effects for button clicks and game events.
+4. Improve the visual design of the menu and game board.
+
+---
+
+## Credits
+- Developed using SDL2.
+- Fonts: `LiberationSans-Regular.ttf`.
